@@ -1,0 +1,61 @@
+<!-- Opened list -->
+<!-- List name -->
+<header class="list-header">
+	<h3>
+	<span ng-hide="listEdit.edit"><i class="fa fa-list-ul"></i> {{searchList.name}}</span>
+	<span ng-show="searchList._id.length && !listEdit.edit">
+		<div class="btn-group  btn-group-sm">
+			<a type="button" class="btn btn-info" ng-click="listEdit.start()"><i class="fa fa-pencil-square-o"></i></a>
+			<a type="button" class="btn btn-warning" ng-click="sendDeleteList()"><i class="fa fa-trash-o"></i></a>
+		</div>
+	</span>
+	</h3>
+	<!-- Changing list name -->
+	<div class="input-group" ng-show="listEdit.edit">
+		<input type="text" class="form-control" ng-model="listEdit.newName" placeholder="List name">
+		<span class="input-group-btn">
+			<button class="btn btn-success" ng-disabled="!listEdit.edit || !listEdit.newName.length || (listEdit.newName === searchList.name)" ng-click="listEdit.send()" type="button">Change name</button>
+			<button class="btn btn-info" ng-disabled="!listEdit.edit" ng-click="listEdit.edit = false" type="button">Done</button>
+		</span>
+	</div>
+</header>
+<!-- Tasks -->
+<!-- not done tasks -->
+<content class="list-group">
+	<a class="list-group-item" ng-repeat="task in me.tasks | orderBy:['-priority'] | filter: search | filter: {done: false}" ng-class="{active: (task._id === taskDetails._id)}" ng-click="selectTask(task)">
+		<h4 class="list-group-item-heading">
+		<i class="fa fa-circle" ng-style="{'color': (countPriorityColor(task.priority))}"></i> {{task.name}}
+		<div class="btn-group btn-group-sm" ng-show='task._id === taskDetails._id'>
+			<button role="button" class="btn" ng-click="sendCompleteTask(task)">Done</button>
+			<button role="button" class="btn btn-danger" ng-click="sendDeleteTask(task)"><i class="fa fa-trash-o"></i></button>
+		</div>
+		</h4>
+		<div ng-show='task._id === taskDetails._id' class="list-group-item-text">
+			<p>{{task.description}}</p>
+			<div ng-show='task._id === taskDetails._id'>
+				<hr>
+				Tags: <span class="label label-primary tag" ng-repeat="tag in task.tags">{{tag.name}}</span>
+			</div>
+		</div>
+	</a>
+</content>
+<hr>
+<content class="list-group">
+	<a class="list-group-item" ng-repeat="task in me.tasks | orderBy:['-priority'] | filter: search | filter: {done: true}" ng-class="{active: (task._id === taskDetails._id)}" ng-click="selectTask(task)">
+		<h4 class="list-group-item-heading">
+		<i class="fa fa-check-circle done-circle"></i>
+		<span class="done">{{task.name}}</span>
+		<div class="btn-group btn-group-sm" ng-show='task._id === taskDetails._id'>
+			<button role="button" class="btn" ng-click="sendCompleteTask(task)">UnDone</button>
+			<button role="button" class="btn btn-danger" ng-click="sendDeleteTask(task)"><i class="fa fa-trash-o"></i></button>
+		</div>
+		</h4>
+		<div ng-show='task._id === taskDetails._id' class="list-group-item-text">
+			<p>{{task.description}}</p>
+			<div ng-show='task._id === taskDetails._id'>
+				<hr>
+				Tags: <span class="label label-primary tag" ng-repeat="tag in task.tags">{{tag.name}}</span>
+			</div>
+		</div>
+	</a>
+</content>

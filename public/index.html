@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app" class="no-js">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Toto - Keep your TODOs straight</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
+		<link rel="stylesheet" href="https://bootswatch.com/sandstone/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="javascripts/ng-tags-input/build/ng-tags-input.min.css">
+		<link rel="stylesheet" href="javascripts/ng-tags-input/build/ng-tags-input.bootstrap.min.css">
+		<link rel="stylesheet" href="stylesheets/style.css">
+	</head>
+	<body>
+		<div class="loading" ng-show="loading">
+			<div class="loading-message">
+				<h3>Loading...</h3>
+				<p>Please wait</p>
+			</div>
+		</div>
+		<div class="container content" ng-class="{blur: loading}">
+			<header class="page-header text-center">
+				<h1><i class="fa fa-sticky-note-o"></i> Toto</h1>
+			</header>
+			<div ng-view></div>
+		</div>
+		
+		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.min.js"></script>
+		<script src="javascripts/ng-tags-input/build/ng-tags-input.min.js"></script>
+		
+		<script src='javascripts/app.js'></script>
+	</body>
+</html>

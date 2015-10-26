@@ -1,0 +1,35 @@
+<!-- Task add -->
+<h3><i class="fa fa-pencil-square-o"></i> Add a new task</h3>
+<form>
+	<div class="form-group">
+		<label for="newTaskName">Task name</label>
+		<div class="input-group">
+			<input type="text" class="form-control" ng-model="newTask.name" placeholder="Task name" id='newTaskName'>
+			<div class="input-group-btn">
+				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<span ng-hide="newTask.list.name.length">List</span>
+				<span ng-show="newTask.list.name.length">{{newTask.list.name}}</span>
+				<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li ng-repeat="list in me.lists"><a ng-click="setList(list)">{{list.name}}</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="newTaskDescription">Description</label>
+		<input type="text" class="form-control" ng-model="newTask.description" placeholder="Description" id='newTaskDescription'>
+	</div>
+	<div class="form-group form-inline">
+		<label for="newTaskPriority">Priority <i class="fa fa-circle" ng-style="{'color': countPriorityColor(newTask.priority)}"></i></label>
+		<input class="form-control" type="range" min="1" max="100" ng-model="newTask.priority" id='newTaskPriority'>
+	</div>
+	<div class="form-group">
+		<label>Tags</label> <tags-input ng-model="newTask.tags" display-property="name" key-property="_id">
+			<auto-complete source="tags" display-property="name"></auto-complete>
+		</tags-input>
+	</div>
+</div>
+<button class="btn btn-success btn-block" ng-disabled="!(newTask.name.length && newTask.list.name)" ng-click="sendNewTask()"><span class="glyphicon glyphicon-plus"></span> Add</button>
+</form>

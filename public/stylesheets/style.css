@@ -1,0 +1,43 @@
+body {
+	margin:0px;
+	padding:0px;
+	word-wrap: break-word;
+}
+.list-header {
+	margin-bottom: 20px;
+}
+.done {
+	text-decoration: line-through;
+	color: Grey;
+}
+.done-circle {
+	color: gray;
+}
+.task {
+	text-decoration: underline;
+}
+.tag {
+	margin:3px;
+}
+.loading {
+	text-align: center;
+	margin:0px;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	background-color: white;
+	opacity: 0.5;
+	z-index: 5;
+}
+.loading-message {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.blur {
+	-webkit-filter: blur(10px);
+  	-moz-filter: blur(10px);
+  	-o-filter: blur(10px);
+  	-ms-filter: blur(10px);
+  	filter: blur(10px);
+}
