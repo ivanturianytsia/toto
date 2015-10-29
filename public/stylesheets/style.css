@@ -6,6 +6,9 @@ body {
 .list-header {
 	margin-bottom: 20px;
 }
+.pic {
+	border-radius: 50%;
+}
 .done {
 	text-decoration: line-through;
 	color: Grey;

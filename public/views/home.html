@@ -3,14 +3,19 @@
 		<!-- Profile -->
 		<div class="panel panel-default">
 			<div class="panel-heading clearfix">
-				<h3 class="panel-title pull-left">{{me.auth.facebook.name}}</h3>
-				<div class="btn-group pull-right btn-group-xs">
-					<button type='button' ng-click="logout()" class="btn btn-warning"><i class="fa fa-sign-out"></i> LogOut</button>
+				<div class="row">
+					<div class="col-md-3 col-sm-3 col-xs-3" ng-show="me.auth"><img ng-src="{{getProfileURL(me.auth.facebook.id)}}" class="img-responsive pic" alt="Profile picture"></div>
+					<div class="col-md-9 col-sm-3 col-xs-3">
+						<h3 class="panel-title">{{me.auth.facebook.name}}</h3>
+						<div class="btn-group btn-group-xs">
+							<button type='button' ng-click="logout()" class="btn btn-warning"><i class="fa fa-sign-out"></i> LogOut</button>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="panel-body">
 				<p>You have <b>{{me.tasks.length}}</b> tasks in <b>{{me.lists.length}}</b> lists.</p>
-				<button class="btn btn-success btn-block" ng-click="editNewTask()"><i class="fa fa-pencil-square-o"></i> Add a new task</button>
+				<button class="btn btn-success btn-block" ng-click="createNewTask()"><i class="fa fa-pencil-square-o"></i> Create a task</button>
 				<hr>
 				<h4 class='text-center'>Lists</h4>
 				<!-- Add list -->

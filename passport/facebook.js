@@ -20,13 +20,11 @@ module.exports = function(passport) {
                         if (err) {
                             return done(err);
                         }
-                        console.log(profile);
                         if (user) {
                             if (!user.auth.facebook.token) { // if there is a user id already but no token (user was linked at one point and then removed)
                                 user.auth.facebook.token = token;
                                 user.auth.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
                                 user.auth.facebook.email = (profile.emails[0].value || '').toLowerCase();
-
                                 user.save(function(err) {
                                     if (err) {
                                         return done(err);
@@ -45,6 +43,7 @@ module.exports = function(passport) {
                                 if (err) {
                                     return done(err);
                                 }
+                                console.log("user created " + newUser);
                                 return done(null, newUser);
                             });
                         }

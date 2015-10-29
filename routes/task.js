@@ -36,12 +36,25 @@ router.post('/create', function(req, res, next) {
         if (error) {
             return next(error);
         }
-        Task.create(req.body, function(error) {
-            if (error) {
-                return next(error);
-            }
-            res.sendStatus(200);
-        });
+        if (req.body._id) { // Update existing task
+            var edited = req.body;
+            var id = edited._id;
+            delete edited._id;
+            Task.findByIdAndUpdate(id, edited)
+                .exec(function(error) {
+                    if (error) {
+                        return next(error);
+                    }
+                    res.sendStatus(200);
+                });
+        } else { // Or create new task
+            Task.create(req.body, function(error) {
+                if (error) {
+                    return next(error);
+                }
+                res.sendStatus(200);
+            });
+        }
     });
 });
 router.put('/delete', function(req, res, next) {

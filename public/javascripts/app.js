@@ -107,6 +107,10 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
             });
         }
     }
+    $scope.getProfileURL = function(userId) { // Getting profile picture
+        var url = "http://graph.facebook.com/" + userId + "/picture?width=200&height=200";
+        return url;
+    }
     $scope.countTasks = function(listId) { // Count task number in the list with listId
         var count = 0;
         $scope.me.tasks.forEach(function(element) {
@@ -129,7 +133,7 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
             users: [$scope.me._id]
         }).success(function() {
             $scope.newList = "";
-            $scope.addingList = false;
+            $scope.creatingNewList = false;
             $scope.refresh();
         });
     }
@@ -140,17 +144,29 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
             user: $scope.me._id
         }).success(function(result) {
             $scope.currentTemplate = templates['home'];
+            $scope.searchList = {};
             $scope.refresh();
         });
     }
     $scope.openList = function(list) { // select tasks which belong to that list and show
-        $scope.listEdit.edit = false
-        $scope.searchList = list
+        $scope.listEdit.edit = false;
+        $scope.searchList = list;
         $scope.currentTemplate = templates['list'];
         $scope.taskDetails = {};
         $scope.search = {
             list: list._id
         };
+        if ($scope.searchList.users && ($scope.searchList.users.length > 1)) {
+            $rootScope.loading = true;
+            $http.post("/list/users", {
+                userIds: $scope.searchList.users
+            }).success(function(users) {
+                $scope.searchList.users = users;
+                $rootScope.loading = false;
+            })
+        } else {
+            $scope.searchList.users = [$scope.me];
+        }
     }
     $scope.findTags = function(searchTag) { // select tasks which has searchTag and show
         $scope.listEdit.edit = false
@@ -168,10 +184,35 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
     $scope.selectTask = function(task) { // Open task details
         $scope.taskDetails = task;
     }
-    $scope.editNewTask = function() { // Open view for new task creation 
+    $scope.createNewTask = function() { // Open view for new task creation
+        if ($scope.newTask._id) {
+            $scope.newTask = {
+                name: "",
+                list: "",
+                tags: [],
+                description: "",
+                priority: 1
+            }
+        }
+        if ($scope.searchList._id) {
+            $scope.newTask.list = $scope.searchList;
+            delete $scope.newTask.list.users;
+            console.log($scope.newTask);
+        } else {
+            $scope.newTask.list = {};
+        }
         $scope.currentTemplate = templates['addTask'];
         $scope.taskDetails = {};
-        $scope.openedList = {};
+        $scope.searchList = {};
+    }
+    $scope.editTask = function(task) { // Open view for new task creation
+        if (task._id) {
+            $scope.newTask = task;
+            $scope.newTask.list = $scope.searchList;
+            delete $scope.newTask.list.users;
+            $scope.currentTemplate = templates['addTask'];
+            $scope.taskDetails = {};
+        }
     }
     $scope.setList = function(list) { // set list for new task creation
         $scope.newTask.list = list;
@@ -183,7 +224,7 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
     }
     $scope.sendNewTask = function() { // send a new created task to backend
         $rootScope.loading = true;
-        $http.post('/task/create', $scope.newTask).success(function(user) {
+        $http.post('/task/create', $scope.newTask).success(function() {
             $scope.newTask = {
                 name: "",
                 list: "",
@@ -194,12 +235,33 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
             $scope.refresh();
         });
     }
+    $scope.sendEditTask = function() { // send a new created task to backend
+        $rootScope.loading = true;
+        $http.post('/task/create', $scope.newTask).success(function() {
+            console.log("refreshing...");
+            $scope.refresh(function(end) {
+                console.log("refreshed");
+                console.log($scope.newTask.list);
+                $scope.openList($scope.me.lists.filter(function(element) {
+                    return element._id === $scope.newTask.list._id
+                })[0]);
+                $scope.newTask = {
+                    name: "",
+                    list: "",
+                    tags: [],
+                    description: "",
+                    priority: 1
+                }
+                end();
+            });
+        });
+    }
     $scope.sendCompleteTask = function(task) { // tell backend about task completion
         $rootScope.loading = true;
         $http.put('/task/done', {
             id: task._id,
             done: !task.done
-        }).success(function(result) {
+        }).success(function() {
             $scope.refresh();
         });
     }
@@ -207,14 +269,43 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
         $rootScope.loading = true;
         $http.put('/task/delete', {
             id: task._id
-        }).success(function(result) {
+        }).success(function() {
             $scope.refresh();
         });
+    }
+    $scope.searchInvite = function(value, index, array) { // Function for angular filter
+        if ($scope.searchList.users) {
+            return $scope.searchList.users.map(function(element) {
+                if (element.auth) {
+                    return element.auth.facebook.id;
+                }
+            }).indexOf(value.id) === -1;
+        }
+    }
+    $scope.sendInvite = function(userId) { // save user in the list-users
+        if ($scope.searchList._id) {
+            $rootScope.loading = true;
+            $http.put('/list/invite', {
+                facebookId: userId,
+                listId: $scope.searchList._id
+            }).success(function() {
+                $scope.refresh(function(end) {
+                    $scope.openList($scope.me.lists.filter(function(element) {
+                        return element._id === $scope.searchList._id
+                    })[0]);
+                    end()
+                });
+            });
+        }
     }
     $scope.refresh = function(callback) { // get info about user, tasks, lists, tags
         $http.get('/me').success(function(user) {
             $scope.tags = [];
             $scope.me = user;
+            $http.get("https://graph.facebook.com/" + user.auth.facebook.id + "/friends?fields=id,name&access_token=" + user.auth.facebook.token)
+                .success(function(friends) {
+                    $scope.me.friends = friends.data;
+                })
             $scope.me.tasks.forEach(function(task) { // filling tags[] array
                 task.tags.forEach(function(tag) {
                     var unique = $scope.tags.filter(function(element) {
@@ -226,9 +317,12 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
                 })
             })
             if (callback) {
-                callback();
+                callback(function() {
+                    $rootScope.loading = false;
+                });
+            } else {
+                $rootScope.loading = false;
             }
-            $rootScope.loading = false;
         });
     }
     $scope.refresh();

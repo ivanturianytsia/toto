@@ -34,33 +34,37 @@ userSchema.methods.validPassword = function(password) {
 // listen for findOne
 userSchema.plugin(postFind, {
     findOne: function(user, callback) {
-        List.find({
-            users: user._id
-        })
-            .exec(function(error, lists) {
-                if (error) {
-                    return callback(error);
-                }
-                user.lists = lists;
-                async.each(lists, function(item, callback) {
-                    Task.find({
-                        list: item._id
-                    })
-                        .populate('tags')
-                        .exec(function(error, tasks) {
-                            if (error) {
-                                return callback(error);
-                            }
-                            user.tasks = user.tasks.concat(tasks);
-                            callback(null, user);
-                        });
-                }, function(error) {
+        if (!user) {
+            callback(null, user)
+        } else {
+            List.find({
+                users: user._id
+            })
+                .exec(function(error, lists) {
                     if (error) {
                         return callback(error);
                     }
-                    callback(null, user)
+                    user.lists = lists;
+                    async.each(lists, function(item, callback) {
+                        Task.find({
+                            list: item._id
+                        })
+                            .populate('tags')
+                            .exec(function(error, tasks) {
+                                if (error) {
+                                    return callback(error);
+                                }
+                                user.tasks = user.tasks.concat(tasks);
+                                callback(null, user);
+                            });
+                    }, function(error) {
+                        if (error) {
+                            return callback(error);
+                        }
+                        callback(null, user);
+                    });
                 });
-            });
+        }
     }
 });
 module.exports = mongoose.model('User', userSchema);

@@ -1,5 +1,6 @@
 <!-- Task add -->
-<h3><i class="fa fa-pencil-square-o"></i> Add a new task</h3>
+<h3 ng-hide="newTask._id"><i class="fa fa-pencil-square-o"></i> Add a new task</h3>
+<h3 ng-show="newTask._id"><i class="fa fa-pencil-square-o"></i> Edit a task</h3>
 <form>
 	<div class="form-group">
 		<label for="newTaskName">Task name</label>
@@ -31,5 +32,6 @@
 		</tags-input>
 	</div>
 </div>
-<button class="btn btn-success btn-block" ng-disabled="!(newTask.name.length && newTask.list.name)" ng-click="sendNewTask()"><span class="glyphicon glyphicon-plus"></span> Add</button>
+<button ng-hide="newTask._id" class="btn btn-success btn-block" ng-disabled="!(newTask.name.length && newTask.list.name)" ng-click="sendNewTask()"><span class="glyphicon glyphicon-plus"></span> Add</button>
+<button ng-show="newTask._id" class="btn btn-primary btn-block" ng-disabled="!(newTask.name.length && newTask.list.name)" ng-click="sendEditTask()"><i class="fa fa-floppy-o"></i> Save</button>
 </form>

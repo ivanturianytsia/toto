@@ -11,7 +11,7 @@ module.exports = function(passport) {
         res.sendStatus(200);
     });
     router.get('/auth/facebook', passport.authenticate('facebook', { // send to facebook to do the authentication
-        scope: ['email']
+        scope: ['email', 'user_friends']
     }));
     router.get('/auth/facebook/callback', // handle the callback after facebook has authenticated the user
         passport.authenticate('facebook', {
@@ -19,7 +19,7 @@ module.exports = function(passport) {
             failureRedirect: '/'
         }));
     router.get('/connect/facebook', passport.authorize('facebook', { // send to facebook to do the authentication
-        scope: ['email']
+        scope: ['email', 'user_friends']
     }));
     router.get('/connect/facebook/callback', // handle the callback after facebook has authorized the user
         passport.authorize('facebook', {
