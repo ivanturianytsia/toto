@@ -25,7 +25,9 @@
 		<h5>Who uses this list:</h5>
 		<p><span ng-repeat="listUser in searchList.users" class="thumbnail user-list-item col-md-1 col-sm-1 col-xs-2">
 			<img ng-show="listUser.auth" class="img-responsive pic user-list-image" ng-src="{{getProfileURL(listUser.auth.facebook.id)}}" ng-alt="{{listUser.auth.facebook.name}}"  data-toggle="tooltip" tabindex="50" data-placement="top" title="{{listUser.auth.facebook.name}}">
-		</span><button type="button" class="btn btn-info" data-toggle="modal" data-target="#invite-modal"><i class="fa fa-plus"></i></button></p>
+		</span>
+		<button type="button" class="btn btn-info share-btn" data-toggle="modal" data-target="#invite-modal"><i class="fa fa-user-plus"></i></button>
+		</p>
 	</div>
 	<div>
 		<!-- Tasks -->
