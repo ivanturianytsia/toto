@@ -12,6 +12,9 @@
 		<link rel="stylesheet" href="lib/ng-tags-input.min/ng-tags-input.min.css">
 		<link rel="stylesheet" href="lib/ng-tags-input.min/ng-tags-input.bootstrap.min.css">
 		<link rel="stylesheet" href="stylesheets/style.css">
+
+		<script src="lib/jquery/jquery.min.js"></script>
+		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 	</head>
 	<body>
 		<div class="loading" ng-show="loading">
@@ -20,19 +23,13 @@
 				<p>Please wait</p>
 			</div>
 		</div>
-		<div class="container-fluid content" ng-class="{blur: loading}">
-			<header class="page-header text-center">
-				<h1><i class="fa fa-sticky-note-o"></i> Toto</h1>
-			</header>
+		<div class="content" ng-class="{blur: loading}">
 			<div ng-view></div>
 		</div>
 		
 		<script src="lib/angular/angular.min.js"></script>
 		<script src="lib/angular/angular-route.min.js"></script>
 		<script src="lib/ng-tags-input.min/ng-tags-input.min.js"></script>
-
-		<script src="lib/jquery/jquery.min.js"></script>
-		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 		
 		<script src='javascripts/app.js'></script>
 	</body>

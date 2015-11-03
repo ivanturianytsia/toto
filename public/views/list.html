@@ -19,8 +19,15 @@
 		</span>
 	</div>
 </header>
-<div class="row">
-	<div class="col-md-10">
+<div class="row list">
+	<!-- Userlist -->
+	<div class="user-list" ng-show="searchList._id">
+		<h5>Who uses this list:</h5>
+		<p><span ng-repeat="listUser in searchList.users" class="thumbnail user-list-item col-md-1 col-sm-1 col-xs-2">
+			<img ng-show="listUser.auth" class="img-responsive pic user-list-image" ng-src="{{getProfileURL(listUser.auth.facebook.id)}}" ng-alt="{{listUser.auth.facebook.name}}"  data-toggle="tooltip" tabindex="50" data-placement="top" title="{{listUser.auth.facebook.name}}">
+		</span><button type="button" class="btn btn-info" data-toggle="modal" data-target="#invite-modal"><i class="fa fa-plus"></i></button></p>
+	</div>
+	<div>
 		<!-- Tasks -->
 		<!-- not done tasks -->
 		<div class="list-group">
@@ -64,20 +71,6 @@
 			</a>
 		</div>
 	</div>
-	<!-- Userlist -->
-	<div class="col-md-2 text-center" ng-show="searchList._id">
-		<h5>Who uses this list:</h5>
-		<div class="text-center" ng-repeat="listUser in searchList.users">
-			<img ng-show="listUser.auth" class="img-responsive pic user-list-image" ng-src="{{getProfileURL(listUser.auth.facebook.id)}}" ng-alt="{{listUser.auth.facebook.name}}">
-			<div class="caption text-center">
-				<h5>{{listUser.auth.facebook.name}}</h5>
-			</div>
-			<hr>
-		</div>
-		<div class="text-center">
-			<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#invite-modal"><i class="fa fa-plus"></i></button>
-		</div>
-	</div>
 </div>
 <div class="modal fade" id="invite-modal" tabindex="-1" role="dialog" aria-labelledby="invite-modal-label">
 	<div class="modal-dialog">
@@ -106,6 +99,15 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <script>
+$(document).ready(function(){
+	$(function() {
+	    $('[data-toggle=tooltip]').tooltip({
+	        trigger: 'hover',
+	        container: 'body'
+	    })
+	});
+	$("[rel=tooltip]").tooltip({ placement: 'right'});
 	$("[data-toggle='popover']").popover();
-	$("[data-toggle='tooltip']").tooltip();
+	$("body").tooltip({ selector: '[data-toggle=tooltip]' });
+});
 </script>

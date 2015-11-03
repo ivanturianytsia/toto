@@ -3,11 +3,30 @@ body {
 	padding:0px;
 	word-wrap: break-word;
 }
+.home-container {
+	padding-top: 100px;
+}
 .list-header {
 	margin-bottom: 20px;
 }
+.list {
+	margin-left:5px;
+	margin-right:5px;
+}
 .pic {
-	border-radius: 50%;
+	border-radius: 10%;
+}
+.user-list {
+	margin-bottom:20px;
+}
+.user-list-item {
+	margin-right:10px;
+	max-width: 50px;
+}
+.user-list-image {
+}
+.navbar-text {
+	margin-left: 20px
 }
 .done {
 	text-decoration: line-through;
