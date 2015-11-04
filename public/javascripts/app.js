@@ -74,7 +74,7 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
         'search': 'views/search.html',
         'home': 'views/homehome.html'
     };
-    $scope.currentTemplate = 'views/homehome.html';
+    $scope.currentTemplate = templates['home'];
     $scope.me = {}; // Facebook data, lists, tasks
     $scope.search = {}; // Data for list filtering
     $scope.searchList = {}; // Opened list, used to get a name
@@ -125,6 +125,12 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
         var green = parseInt(132 * (100 - priority) / 100 + 99)
         var blue = parseInt(31 * (100 - priority) / 100 + 71)
         return "rgb(" + red + "," + green + "," + blue + ")";
+    }
+    $scope.goHome = function() { // Getting profile picture
+        $scope.currentTemplate = $scope.templates['home'];
+    }
+    $scope.toggleEditNewList = function() { // Getting profile picture
+        $scope.creatingNewList = !$scope.creatingNewList;
     }
     $scope.sendNewList = function() { // send new list to backend 
         $rootScope.loading = true;

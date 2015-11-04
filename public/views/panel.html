@@ -14,7 +14,7 @@
 		<br>
 		<!-- List of Lists -->
 		<div class="list-group">
-			<a class="list-group-item" ng-click="creatingNewList = !creatingNewList"><i class="fa fa-plus"></i> <b>Create a list</b></a>
+			<a class="list-group-item" ng-click="toggleEditNewList()"><i class="fa fa-plus"></i> <b>Create a list</b></a>
 			<a class="list-group-item" ng-repeat="list in me.lists" ng-class="{active: (list._id === search.list._id)}" ng-click="openList(list)"><b>{{list.name}}</b><span class="badge">{{countTasks(list._id)}}</span></a>
 		</div>
 		<!-- List of Tags -->
