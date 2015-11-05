@@ -1,6 +1,17 @@
-<!-- Task add -->
-<h3 ng-hide="newTask._id"><i class="fa fa-pencil-square-o"></i> Add a new task</h3>
-<h3 ng-show="newTask._id"><i class="fa fa-pencil-square-o"></i> Edit a task</h3>
+<!-- Go back -->
+<div class="row">
+	<div class="visible-xs col-xs-2">
+		<button class="btn btn-info btn-block" ng-click="goHome()">
+		<i class="fa fa-chevron-left"></i>
+		</button>
+	</div>
+	<div class="col-xs-10">
+		<!-- Task add -->
+		<h3 ng-hide="newTask._id"><i class="fa fa-pencil-square-o"></i> Add a new task</h3>
+		<h3 ng-show="newTask._id"><i class="fa fa-pencil-square-o"></i> Edit a task</h3>
+	</div>
+</div>
+<hr>
 <form>
 	<div class="form-group">
 		<label for="newTaskName">Task name</label>
@@ -28,9 +39,9 @@
 	</div>
 	<div class="form-group">
 		<label>Tags</label> <tags-input ng-model="newTask.tags" display-property="name" key-property="_id">
-			<auto-complete source="tags" display-property="name"></auto-complete>
-		</tags-input>
-	</div>
+	<auto-complete source="tags" display-property="name"></auto-complete>
+	</tags-input>
+</div>
 </div>
 <button ng-hide="newTask._id" class="btn btn-success btn-block" ng-disabled="!(newTask.name.length && newTask.list.name)" ng-click="sendNewTask()"><span class="glyphicon glyphicon-plus"></span> Add</button>
 <button ng-show="newTask._id" class="btn btn-primary btn-block" ng-disabled="!(newTask.name.length && newTask.list.name)" ng-click="sendEditTask()"><i class="fa fa-floppy-o"></i> Save</button>

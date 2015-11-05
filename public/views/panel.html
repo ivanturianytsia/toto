@@ -3,18 +3,18 @@
 		<p>You have <b>{{me.tasks.length}}</b> tasks in <b>{{me.lists.length}}</b> lists.</p>
 		<button class="btn btn-success btn-block" ng-click="createNewTask()"><i class="fa fa-pencil-square-o"></i> Create a task</button>
 		<hr>
+		<!-- List of Lists -->
 		<h4 class='text-center'>Lists</h4>
 		<!-- Add list -->
-		<div class="input-group" ng-show="creatingNewList">
-			<input type="text" class="form-control" ng-model="newList" placeholder="New list name">
+		<div class="input-group" ng-show="newList.on">
+			<input type="text" class="form-control" ng-model="newList.name" placeholder="New list name">
 			<span class="input-group-btn">
-				<button class="btn btn-default" ng-disabled="!creatingNewList || !newList.length" ng-click="sendNewList()" type="button">Create</button>
+				<button class="btn btn-default" ng-disabled="!newList.on || !newList.name.length" ng-click="newList.send()" type="button">Create</button>
 			</span>
 		</div>
 		<br>
-		<!-- List of Lists -->
 		<div class="list-group">
-			<a class="list-group-item" ng-click="toggleEditNewList()"><i class="fa fa-plus"></i> <b>Create a list</b></a>
+			<a class="list-group-item" ng-click="newList.toggle()"><i class="fa fa-plus"></i> <b>Create a list</b></a>
 			<a class="list-group-item" ng-repeat="list in me.lists" ng-class="{active: (list._id === search.list._id)}" ng-click="openList(list)"><b>{{list.name}}</b><span class="badge">{{countTasks(list._id)}}</span></a>
 		</div>
 		<!-- List of Tags -->

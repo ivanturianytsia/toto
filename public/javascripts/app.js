@@ -68,7 +68,7 @@ var app = angular.module('app', ['ngRoute', 'ngTagsInput'])
 app.controller('LoginCtrl', function($scope, $rootScope, $http, $location) {});
 app.controller('HomeCtrl', function($scope, $rootScope, $http) {
     $rootScope.loading = true; // Show loading screen
-    templates = {
+    var templates = {
         'addTask': 'views/addTask.html',
         'list': 'views/list.html',
         'search': 'views/search.html',
@@ -87,13 +87,33 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
         description: "",
         priority: 1
     }
-    $scope.creatingNewList = false; // show/hide field and button for creating a list
+    $scope.newList = {
+        name: "",
+        on: false, // show/hide field and button for creating a list
+        toggle: function() { // Getting profile picture
+            $scope.newList.on = !$scope.newList.on;
+        },
+        send: function() { // send new list to backend 
+            if ($scope.newList.name) {
+                $rootScope.loading = true;
+                $http.post('/list/create', {
+                    name: $scope.newList.name,
+                    users: [$scope.me._id]
+                }).success(function() {
+                    $scope.newList.name = "";
+                    $scope.newList.on = false;
+                    $scope.refresh();
+                });
+            } else {
+                alert("Error with sending new list");
+                console.log($scope.newList.name);
+            }
+        }
+    }
     $scope.listEdit = {
-        edit: false, // show/hide field and button for changing a list name
         newName: "", // new name for a list
         start: function() { // Start editing
             $scope.listEdit.newName = $scope.searchList.name;
-            $scope.listEdit.edit = true; // show/hide field and button for changing a list name
         },
         send: function() { // tell backend about changing name of the list
             $rootScope.loading = true;
@@ -101,11 +121,34 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
                 id: $scope.searchList._id,
                 name: $scope.listEdit.newName
             }).success(function(result) {
-                $scope.listEdit.edit = false;
                 $scope.searchList.name = $scope.listEdit.newName;
                 $scope.refresh();
             });
         }
+    }
+    $scope.manualRefresh = function() {
+        $rootScope.loading = true;
+        $scope.refresh(function(end) {
+            if ($scope.searchList.name) {
+                if ($scope.searchList._id) {
+                    $scope.openList($scope.me.lists.filter(function(element) {
+                        return element._id === $scope.searchList._id
+                    })[0]);
+                } else {
+                    var oldTag = $scope.tags.filter(function(element) {
+                        return element._id === $scope.searchList.tag_id
+                    })
+                    if (oldTag.length) {
+                        $scope.findTags(oldTag[0]);
+                    } else {
+                        $scope.goHome();
+                    }
+                }
+            } else {
+                $scope.goHome();
+            }
+            end();
+        });
     }
     $scope.getProfileURL = function(userId) { // Getting profile picture
         var url = "http://graph.facebook.com/" + userId + "/picture?width=200&height=200";
@@ -127,21 +170,9 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
         return "rgb(" + red + "," + green + "," + blue + ")";
     }
     $scope.goHome = function() { // Getting profile picture
-        $scope.currentTemplate = $scope.templates['home'];
-    }
-    $scope.toggleEditNewList = function() { // Getting profile picture
-        $scope.creatingNewList = !$scope.creatingNewList;
-    }
-    $scope.sendNewList = function() { // send new list to backend 
+        $scope.currentTemplate = templates['home'];
         $rootScope.loading = true;
-        $http.post('/list/create', {
-            name: $scope.newList,
-            users: [$scope.me._id]
-        }).success(function() {
-            $scope.newList = "";
-            $scope.creatingNewList = false;
-            $scope.refresh();
-        });
+        $scope.refresh();
     }
     $scope.sendDeleteList = function(list) { // tell backend about deleting a list
         $rootScope.loading = true;
@@ -177,7 +208,8 @@ app.controller('HomeCtrl', function($scope, $rootScope, $http) {
     $scope.findTags = function(searchTag) { // select tasks which has searchTag and show
         $scope.listEdit.edit = false
         $scope.searchList = {
-            name: "Search results by tag: " + searchTag.name
+            name: "Search results by tag: " + searchTag.name,
+            tag_id: searchTag._id
         }
         $scope.currentTemplate = templates['list'];
         $scope.taskDetails = {};

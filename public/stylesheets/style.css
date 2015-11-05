@@ -1,13 +1,10 @@
 body {
-	margin:0px;
-	padding:0px;
 	word-wrap: break-word;
 }
 .home-container {
 	padding-top: 100px;
 }
 .list-header {
-	margin-bottom: 20px;
 }
 .list {
 	margin-left:5px;
@@ -17,7 +14,6 @@ body {
 	border-radius: 50%;
 }
 .user-list {
-	margin-bottom:20px;
 }
 .user-list-item {
 	margin-right:10px;
@@ -69,4 +65,7 @@ body {
   	-o-filter: blur(10px);
   	-ms-filter: blur(10px);
   	filter: blur(10px);
+}
+.list-header-controls {
+	margin-bottom: 5px;
 }
