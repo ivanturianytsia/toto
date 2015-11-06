@@ -1,5 +1,7 @@
 body {
 	word-wrap: break-word;
+	overflow: hidden;
+    overflow-y: auto;
 }
 .home-container {
 	padding-top: 100px;
